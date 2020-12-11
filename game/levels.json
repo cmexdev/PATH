@@ -1,0 +1,11 @@
+{
+    "items": {
+        "logs": 1,
+        "coal": 1,
+        "iron": 2   
+    },
+    "biomes": {
+        "plain": 1,
+        "cave": 1
+    }
+}

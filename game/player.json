@@ -1,0 +1,15 @@
+{
+    "player": {
+        "inventory": {
+            "numberofslots": 14
+        },
+        "hotbar": {
+            "numberofslots": 7
+        },
+        "armor": {
+            "head": {
+                
+            }
+        }
+    }
+}

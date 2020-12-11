@@ -1,0 +1,16 @@
+{
+    "items": {
+        "logs": {
+            "dname": "Logs",
+            "desc": "Bascially a broken tree."
+        },
+        "coal": {
+            "dname": "Coal",
+            "desc": "A black thing that you get when mining."
+        },
+        "iron": {
+            "dname": "Iron",
+            "desc": "OOOH!! Shiny and strong, makes good things."
+        }
+    }
+}

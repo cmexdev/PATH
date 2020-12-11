@@ -1,0 +1,10 @@
+{
+    "discovered": {
+        "biomes": [
+            "cave"
+        ],
+        "items": [
+            "coal", "logs"
+        ]
+    }
+}

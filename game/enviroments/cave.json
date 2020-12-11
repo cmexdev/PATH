@@ -1,0 +1,50 @@
+{
+    "variants": [
+        {
+            "id": "cave1",
+            "type": "continue",
+            "message": "You enter a musky cave. There are two branches. At the end of one of them, you see a light. There is also some coal on the wall.",
+            "options": [
+                {
+                    "title": "Enter the dark branch",
+                    "action": "go:cave"
+                },
+                {
+                    "title": "Mine the coal and move on",
+                    "action": "give:coal=>go:cave"
+                },
+                {
+                    "title": "Enter the branch with light",
+                    "action": "go:cave"
+                },
+                {
+                    "title": "More options",
+                    "action": "show:options"
+                }
+            ]
+        },
+        {
+            "id": "cave2",
+            "type": "exit",
+            "message": "You enter a naturally-lit cave. There is some iron on the side, but it is high up, there is a way back to the surface, and there is another branch that goes down deep.",
+            "options": [
+                {
+                    "title": "Mine the iron but continue in the cave",
+                    "action": "give:iron=>go:cave"
+                },
+                {
+                    "title": "Exit the cave",
+                    "action": "go:plain"
+                },
+                {
+                    "title": "Go down the deep and dark path",
+                    "action": "go:cave"
+                },
+                {
+                    "title": "More options",
+                    "action": "show:options"
+                }
+            ]
+        }
+    ]
+}

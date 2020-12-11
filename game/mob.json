@@ -1,0 +1,26 @@
+[
+    {
+        "name": "zombie",
+        "type": "monster",
+        "level": 5,
+        "health": 100
+    },
+    {
+        "name": "skelly",
+        "type": "monster",
+        "level": 5,
+        "health": 100
+    },
+    {
+        "name": "cow",
+        "type": "friendly",
+        "level": 1,
+        "health": 10
+    },
+    {
+        "name": "spider",
+        "type": "monster",
+        "level": 5,
+        "health": 100
+    }
+]

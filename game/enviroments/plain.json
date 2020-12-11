@@ -1,0 +1,56 @@
+{
+    "variants": [
+        {
+            "id": "plain1",
+            "type": "exit",
+            "message": "You walk out onto a plain. You see a forest, which has an enterance to a cave, but then, in all other directions, you only see more of the vast plain.",
+            "options": [
+                {
+                    "title": "Enter the cave",
+                    "key": "C",
+                    "action": "go:cave"
+                },
+                {
+                    "title": "Continue walking",
+                    "key": "W",
+                    "action": "go:plain"
+                },
+                {
+                    "title": "Continue walking",
+                    "key": "W",
+                    "action": "go:plain"
+                },
+                {
+                    "title": "More options",
+                    "action": "show:options"
+                }
+            ]
+        },
+        {
+            "id": "plain2",
+            "type": "continue",
+            "message": "You come walk out onto a plain. All you see is grass and some trees.",
+            "options": [
+                {
+                    "title": "Cut down the trees and move on",
+                    "key": "C",
+                    "action": "give:logs=>go:plain"
+                },
+                {
+                    "title": "Continue walking",
+                    "key": "W",
+                    "action": "go:plain"
+                },
+                {
+                    "title": "Continue walking",
+                    "key": "W",
+                    "action": "go:plain"
+                },
+                {
+                    "title": "More options",
+                    "action": "show:options"
+                }
+            ]
+        }
+    ]
+}
