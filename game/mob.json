@@ -3,7 +3,8 @@
         "name": "zombie",
         "type": "monster",
         "level": 5,
-        "health": 100
+        "health": 100,
+        "defeat": ""
     },
     {
         "name": "skelly",
