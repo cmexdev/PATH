@@ -60,6 +60,14 @@ function err(errtext) {
     }))
 }
 
+function good(text) {
+    console.log(boxen(text, {
+        padding: 1,
+        margin: 1,
+        borderColor: 'green'
+    }))
+}
+
 function levelUp(text) {
     console.log(boxen('LEVEL UP '.green + text, {
         padding: 1,
@@ -365,7 +373,15 @@ function game(task, game, enviroid) {
 
         gamedata.state = ['enviro', enviroment, varianid]
 
-        const e = jason.read('game\\enviroments\\' + enviroment + '.json')
+        var e = ''
+
+        try {
+            e = jason.read('game\\enviroments\\' + enviroment + '.json')
+        } catch (er) {
+            console.log('An unknown error occured!'.white.bgRed + ' See error details below.'.gray)
+            err(er)
+            process.exit()
+        }
 
         var index = 0
 
@@ -407,6 +423,14 @@ function action(act) {
     if (act == 'show:options') {
         return showOptions(gamedata.currentgame)
     }
+    else if (act == 'mob-runaway') {
+        if (Math.floor(Math.random() * 2) == 1) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
 
     //DECODE ACTION
     var as = act.split(':')
@@ -420,6 +444,7 @@ function action(act) {
     }
     else if (task == 'give') {
         if (as[1].includes('=>') == false) {
+            //ADD THIS PART
             console.log('give: ' + as[1])
         }
         else {
@@ -428,7 +453,11 @@ function action(act) {
 
             player.inventory.forEach(el => {
                 if (el.id == itemtogive) {
-                    el.amount += Math.floor(Math.random() * 10)
+                    var rn = Math.floor(Math.random() * 10)
+                    el.amount += rn
+                    if (itemtogive == 'iron') {
+                        player.level += rn / 2
+                    }
                 }
             })
 
@@ -482,6 +511,7 @@ function saveGame(enviro, envirovarianid, gamename, playerinven, playerlev, disc
 function showOptions(game) {
     const g = jason.read('game\\games\\' + game + '\\game.json')
     var opt = ['Exit to menu', 'View inventory', 'Cancel']
+    console.log('Player level: '.blue + player.level)
     term.singleRowMenu(opt, function (e, r) {
         if (e) {
             err(e)
@@ -495,16 +525,17 @@ function showOptions(game) {
                 console.clear()
 
                 var inven = [
-                    ['Name', 'Description', 'Amount', 'Uses']
+                    ['Name', 'Type', 'Description', 'Amount', 'Strength']
                 ]
 
                 player.inventory.forEach(el => {
                     var i = gamedata.items.items[el.id]
                     var e = []
                     e[0] = i.dname
-                    e[1] = '^B' + i.desc
-                    e[2] = '^G' + el.amount
-                    e[3] = null
+                    e[1] = i.type
+                    e[2] = '^B' + i.desc
+                    e[3] = '^G' + el.amount
+                    e[4] = i.strength
                     inven.push(e)
                 })
 
@@ -533,7 +564,7 @@ function showOptions(game) {
 
                 term.singleRowMenu(['Continue'], function (e, r) {
                     if (g.gamestate[0] == 'mob') {
-                        return spawn(g.gamestate[3], g.name, 'spawncontinue', g.gamestate[1], g.gamestate[1])
+                        return spawn(g.gamestate[3], g.name, 'spawncontinue', g.gamestate[1], g.gamestate[2])
                     }
                     else if (g.gamestate[0] == 'enviro') {
                         return startLoadedGame(game)
@@ -542,7 +573,7 @@ function showOptions(game) {
             }
             else if (r.selectedIndex == 2) {
                 if (g.gamestate[0] == 'mob') {
-                    return spawn(g.gamestate[3], g.name, 'spawncontinue', g.gamestate[1], g.gamestate[1])
+                    return spawn(g.gamestate[3], g.name, 'spawncontinue', g.gamestate[1], g.gamestate[2])
                 }
                 else if (g.gamestate[0] == 'enviro') {
                     return startLoadedGame(game)
@@ -585,6 +616,37 @@ function spawn(mobtype, gn, task, mob, gamed) {
                 else {
                     if (r.selectedIndex == 0) {
                         //run away
+                        if (action('mob-runaway') == true) {
+                            good('You escaped!')
+
+                            term.singleLineMenu(['Take a breather'], function (e, r) {
+                                if (e) {
+                                    err(e)
+                                }
+                                else {
+                                    if (r.selectedIndex == 0) {
+                                        //continue the game
+                                        return game('loadfromsaved', gamed[0], gamed[1])
+                                    }
+                                }
+                            })
+                        }
+                        else {
+                            err('You were caught!')
+                            console.log('You lost '.cyan + m.level / 2 + ' levels!'.cyan)
+                            player.level += -(m.level / 2)
+                            term.singleLineMenu(['Take a breather'], function (e, r) {
+                                if (e) {
+                                    err(e)
+                                }
+                                else {
+                                    if (r.selectedIndex == 0) {
+                                        //continue the game
+                                        return game('loadfromsaved', gamed[0], gamed[1])
+                                    }
+                                }
+                            })
+                        }
                     }
                     else if (r.selectedIndex == 1) {
                         //prepare
@@ -625,10 +687,39 @@ function spawn(mobtype, gn, task, mob, gamed) {
                 else {
                     if (r.selectedIndex == 0) {
                         //run away
+                        if (action('mob-runaway') == true) {
+                            good('You escaped!')
+
+                            term.singleLineMenu(['Take a breather'], function (e, r) {
+                                if (e) {
+                                    err(e)
+                                }
+                                else {
+                                    if (r.selectedIndex == 0) {
+                                        //continue the game
+                                        return game('loadfromsaved', gamed[0], gamed[1])
+                                    }
+                                }
+                            })
+                        }
+                        else {
+                            err('You were caught!')
+                            term.singleLineMenu(['Take a breather'], function (e, r) {
+                                if (e) {
+                                    err(e)
+                                }
+                                else {
+                                    if (r.selectedIndex == 0) {
+                                        //continue the game
+                                        return game('loadfromsaved', gamed[0], gamed[1])
+                                    }
+                                }
+                            })
+                        }
                     }
                     else if (r.selectedIndex == 1) {
                         //prepare
-                        console.log(inventory.has('iron'))
+                        
                     }
                     else if (r.selectedIndex == 2) {
                         return showOptions(gn)

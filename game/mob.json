@@ -4,7 +4,7 @@
         "type": "monster",
         "level": 5,
         "health": 100,
-        "defeat": ""
+        "defeat": ["tool", "strength:5"]
     },
     {
         "name": "skelly",

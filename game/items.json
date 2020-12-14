@@ -2,15 +2,30 @@
     "items": {
         "logs": {
             "dname": "Logs",
-            "desc": "Bascially a broken tree."
+            "desc": "Bascially a broken tree.",
+            "type": "material"
         },
         "coal": {
             "dname": "Coal",
-            "desc": "A black thing that you get when mining."
+            "desc": "A black thing that you get when mining.",
+            "type": "material"
         },
         "iron": {
             "dname": "Iron",
-            "desc": "OOOH!! Shiny and strong, makes good things."
+            "desc": "OOOH!! Shiny and strong, makes good things.",
+            "type": "material"
+        },
+        "ironsword": {
+            "dname": "Iron Sword",
+            "desc": "A strong sword.",
+            "strength": 10,
+            "type": "weapon"
+        },
+        "woodsword": {
+            "dname": "Wood Sword",
+            "desc": "A sword that's made out of wood! 'Amazn basix'!",
+            "strength": 5,
+            "type": "weapon"
         }
     }
 }
