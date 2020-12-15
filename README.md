@@ -1,5 +1,7 @@
 # **Path**
 
+**This readme may not be fully updated to the latest commit! DO NOT RELY ON IT!!**
+
 A simple, but exciting console-based game.
 
 ## Game data
