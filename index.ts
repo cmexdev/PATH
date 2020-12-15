@@ -50,7 +50,7 @@ const inventory = {
                     a.push(h)
                 }
             })
-
+            
             if (a != []) {
                 return [true, a]
             }
@@ -688,7 +688,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                             console.log('\n')
                             console.log('Select which weapon you want to use:'.cyan)
 
-                            term.singleColumnMenu(itu, function (e, r) {
+                            term.singleColumnMenu(itu, function(e, r) {
                                 if (e) {
                                     err(e)
                                 }
@@ -703,7 +703,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                                         //lose levels
                                         player.level += -(m.level)
 
-                                        term.singleLineMenu(['Continue'], function (e, r) {
+                                        term.singleLineMenu(['Continue'], function(e, r) {
                                             if (e) {
                                                 err(e)
                                             }
@@ -716,7 +716,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                                         good('You stabbed him in the throat...and, well the rest is history.')
                                         console.log('Good news is you won!'.gray)
 
-                                        term.singleLineMenu(['Continue'], function (e, r) {
+                                        term.singleLineMenu(['Continue'], function(e, r) {
                                             if (e) {
                                                 err(e)
                                             }
@@ -813,7 +813,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                             console.log('\n')
                             console.log('Select which weapon you want to use:'.cyan)
 
-                            term.singleColumnMenu(itu, function (e, r) {
+                            term.singleColumnMenu(itu, function(e, r) {
                                 if (e) {
                                     err(e)
                                 }
@@ -828,7 +828,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                                         //lose levels
                                         player.level += -(m.level)
 
-                                        term.singleLineMenu(['Continue'], function (e, r) {
+                                        term.singleLineMenu(['Continue'], function(e, r) {
                                             if (e) {
                                                 err(e)
                                             }
@@ -841,7 +841,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                                         good('You stabbed him in the throat...and, well the rest is history.')
                                         console.log('Good news is you won!'.gray)
 
-                                        term.singleLineMenu(['Continue'], function (e, r) {
+                                        term.singleLineMenu(['Continue'], function(e, r) {
                                             if (e) {
                                                 err(e)
                                             }

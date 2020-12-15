@@ -10,7 +10,8 @@
         "name": "skelly",
         "type": "monster",
         "level": 5,
-        "health": 100
+        "health": 100,
+        "defeat": ["tool", "strength:5"]
     },
     {
         "name": "cow",
@@ -22,6 +23,7 @@
         "name": "spider",
         "type": "monster",
         "level": 5,
-        "health": 100
+        "health": 100,
+        "defeat": ["tool", "strength:5"]
     }
 ]

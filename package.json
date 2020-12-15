@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "title PATH && node index.js",
-    "path:v": "electron v.js"
+    "path:v": "electron v.js",
+    "path": "title PATH && node index.ts"
   },
   "author": "Owen Magill",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "jquery": "^3.5.1",
     "jsdom": "^16.4.0",
     "readline": "^1.3.0",
+    "terminal-image": "^1.2.1",
     "terminal-kit": "^1.44.0"
   }
 }

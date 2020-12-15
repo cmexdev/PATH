@@ -5,14 +5,14 @@ A simple, but exciting console-based game.
 ## Game data
 <hr>
 
-**NOTE**: The words enviroments and biomes will both be used. *They are the same.*
+**NOTE**: The words environments and biomes will both be used. *They are the same.*
 
 ### Biomes
 
 - `cave`
 - `plain`
 
-**To access the JSON file for a biome**, simply put a `.json` on the end of it and that's the file. (*Files located in `game\\enviroments\\{enviroment}.json`*)
+**To access the JSON file for a biome**, simply put a `.json` on the end of it and that's the file. (*Files located in `game\\environments\\{environment}.json`*)
 
 ### Items
 
@@ -24,7 +24,7 @@ A simple, but exciting console-based game.
 
 - `options`
 
-### Enviroment JSON syntax
+### environment JSON syntax
 
 There are different properties in the biome JSON file.
 
@@ -70,11 +70,11 @@ You can also have a callback action if the action does not involve going to anot
 
 |Action|Action description|Requires callback|
 |-|-|-|
-|`go:{enviroment}`|Transports the player to `{enviroment}`|`false`|
-|`give:{item}`|Gives the player the item `{item}`|`true`: `give:{item}=>go:{enviroment}`|
+|`go:{environment}`|Transports the player to `{environment}`|`false`|
+|`give:{item}`|Gives the player the item `{item}`|`true`: `give:{item}=>go:{environment}`|
 |`show:{menu}`|Shows specified `{menu}`|`false`|
 
-*A list of items, enviroments, and menus is listed above.*
+*A list of items, environments, and menus is listed above.*
 
 ## Game mechanics
 <hr>
@@ -90,6 +90,8 @@ This occurence is chosen at random. It varies from mob to mob.
 - Specific biome
     - Cave
 
+**Monsters will not spawn until these requirements are met.**
+
 **Actions**
 
 When a monster spawns, player have two options: `Run away`, or `Prepare`
@@ -102,7 +104,9 @@ It is decided by a small random number generator.
 
 If the player is lucky enough, they will have successfully run away. If not, the consequences will be as if the player died.
 
-**Monsters will not spawn until these requirements are met.**
+**Prepare**
+
+**Using a more powerful tool gives the player more levels when the defeat the mob.**
 
 ### Rarity equations
 
@@ -165,9 +169,7 @@ It returns an array.
 
 ### Programming
 
-**This game was written in vanilla JavaScript.**
-
-Data files in JSON.
+Written in Node.js and JSON.
 
 #### Common code
 
@@ -189,13 +191,13 @@ term.singleLineMenu(array, function(e, r) {
 `enviro`
 
 ```js
-['enviro', enviroment, enviroment_id]
+['enviro', environment, environment_id]
 ```
 
 `mob`
 
 ```js
-['mob', mobname, [enviroment, enviroment_id], mobtype]
+['mob', mobname, [environment, environment_id], mobtype]
 ```
 
 ### Packages

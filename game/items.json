@@ -19,13 +19,13 @@
             "dname": "Iron Sword",
             "desc": "A strong sword.",
             "strength": 10,
-            "type": "weapon"
+            "type": "tool"
         },
         "woodsword": {
             "dname": "Wood Sword",
             "desc": "A sword that's made out of wood! 'Amazn basix'!",
             "strength": 5,
-            "type": "weapon"
+            "type": "tool"
         }
     }
 }
