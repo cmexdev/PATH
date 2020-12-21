@@ -7,8 +7,12 @@ const term = require('terminal-kit').terminal
 const termkit = require('terminal-kit')
 const jason = require('ezjason')
 const package = jason.read('package.json')
-const termimg = require('terminal-image')
+const fetch = require('node-fetch')
+const dns = require('dns')
+const http = require('http')
+var githubpackage = {}
 
+//set globals empty to prepare for load
 const player = {}
 player.inventory = []
 player.discovered = {
@@ -17,6 +21,7 @@ player.discovered = {
 }
 player.level = 0
 
+//inventory object
 const inventory = {
     has: function invenHas(item) {
         if (player.inventory == []) {
@@ -61,8 +66,12 @@ const inventory = {
     }
 }
 
-const gamedata = {}
+function checkInternet() {
+    return 'not_in_use'
+}
 
+//set gamedata
+const gamedata = {}
 gamedata.items = jason.read('game\\items.json')
 gamedata.levels = jason.read('game\\levels.json')
 gamedata.spawning = jason.read('game\\spawning.json')
@@ -71,8 +80,10 @@ gamedata.state = []
 
 const enviros = fs.readdirSync('game\\environments\\')
 
+//set gamefile
 var gamefile = {}
 
+//err function
 function err(errtext) {
     console.log(boxen('[!] '.red + errtext, {
         padding: 1,
@@ -82,6 +93,7 @@ function err(errtext) {
     }))
 }
 
+//success function
 function good(text) {
     console.log(boxen(text, {
         padding: 1,
@@ -90,6 +102,7 @@ function good(text) {
     }))
 }
 
+//level up function
 function levelUp(text) {
     console.log(boxen('LEVEL UP '.green + text, {
         padding: 1,
@@ -98,13 +111,51 @@ function levelUp(text) {
     }))
 }
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-})
+pre()
 
-mainMenu()
+function pre() {
+    //check connection
+    dns.resolve('www.google.com', function (e) {
+        if (e) {
+            err(e)
+            term.singleLineMenu(['Continue'], function (e, r) {
+                if (e) {
+                    err(e)
+                }
+                else {
+                    return mainMenu()
+                }
+            })
+        }
+        else {
+            fetch('https://raw.githubusercontent.com/cmexdev/PATH/main/package.json', { method: 'Get' }).then(res => res.json()).then((json) => {
+                if (json.version == package.version) {
+                    good('Using current version of PATH!')
+                    return mainMenu()
+                }
+                else {
+                    good('There is an updated version of PATH available!')
+                    term.singleLineMenu(['Update now', 'Cancel'], function (e, r) {
+                        if (e) {
+                            err(e)
+                        }
+                        else {
+                            if (r.selectedIndex == 1) {
+                                return mainMenu()
+                            }
+                            else if (r.selectedIndex == 0) {
+                                const install = fs.createWriteStream('install-' + json.version)
+                                const req = http.get('')
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    })
+}
 
+//main menu function
 function mainMenu(preinfo) {
     console.clear()
     if (preinfo) {
@@ -147,6 +198,7 @@ function mainMenu(preinfo) {
     })
 }
 
+//handle creation of new game
 function newGame() {
     //THIS FUNCTION WILL DEAL WITH CREATING A NEW GAME FILE(S) AND CHECKING IF IT ALREADY EXISTS
     console.log(boxen('Create a new game', {
@@ -156,8 +208,7 @@ function newGame() {
 
     console.log('What should we call this game? '.cyan)
     term.inputField({
-        cancelable: true,
-        echo: false
+        cancelable: true
     }, function (e, r) {
         if (e) {
             err(e)
@@ -186,6 +237,7 @@ function newGame() {
     })
 }
 
+//create files for new game
 function createValidGame(name) {
     console.log('Creating game: ' + name)
 
@@ -194,6 +246,7 @@ function createValidGame(name) {
     return loadEmptyGame(name)
 }
 
+//load a saved game
 function loadGame() {
     console.clear()
     var games = fs.readdirSync('game\\games\\')
@@ -219,7 +272,7 @@ function loadGame() {
                 else {
                     console.log('\n\nSelecting game: ', i.green.underline)
 
-                    //continue loading game
+                    //continue loading game & set current game
                     gamedata.currentgame = i
                     return startLoadedGame(i)
                 }
@@ -228,6 +281,7 @@ function loadGame() {
     )
 }
 
+//load a game that has no data
 function loadEmptyGame(name) {
     var egmd = {
         name: name,
@@ -244,6 +298,7 @@ function loadEmptyGame(name) {
     fs.writeFileSync('game\\games\\' + name + '\\game.json', JSON.stringify(egmd))
 
     gamedata.currentgame = name
+    player.level = 0
     player.inventory = []
     player.discovered = {
         biomes: [],
@@ -253,6 +308,7 @@ function loadEmptyGame(name) {
     return game('randomgen')
 }
 
+//start a game from saved state
 function startLoadedGame(name) {
     var gamefile = ''
     try {
@@ -308,7 +364,7 @@ function game(task, game, enviroid) {
 
         en.options.forEach(el => {
             arr++
-            opt.push('[' + arr + '] ' + el.title)
+            opt.push(el.title)
         })
 
         term.singleColumnMenu(opt, function (e, resp) {
@@ -360,7 +416,7 @@ function game(task, game, enviroid) {
                     if (Math.floor(Math.random() * 10) == 6) {
                         sm++
                     }
-                } ``
+                }
             }
         })
 
@@ -379,7 +435,7 @@ function game(task, game, enviroid) {
 
         en.options.forEach(el => {
             arr++
-            opt.push('[' + arr + '] ' + el.title)
+            opt.push(el.title)
         })
 
         term.singleColumnMenu(opt, function (e, resp) {
@@ -417,6 +473,8 @@ function game(task, game, enviroid) {
 
         const en = e.variants[index]
 
+        saveGame(environment, varianid, gamedata.currentgame, player.inventory, player.level, player.discovered, gamedata.state)
+
         console.log(boxen(en.message, {
             padding: 1,
             borderColor: 'grey',
@@ -428,7 +486,7 @@ function game(task, game, enviroid) {
 
         en.options.forEach(el => {
             arr++
-            opt.push('[' + arr + '] ' + el.title)
+            opt.push(el.title)
         })
 
         term.singleColumnMenu(opt, function (e, resp) {
@@ -441,7 +499,6 @@ function game(task, game, enviroid) {
 }
 
 function action(act) {
-
     if (act == 'show:options') {
         return showOptions(gamedata.currentgame)
     }
@@ -466,15 +523,17 @@ function action(act) {
     }
     else if (task == 'give') {
         if (as[1].includes('=>') == false) {
-            //ADD THIS PART
-            console.log('give: ' + as[1])
+            err('method not supported @action=>give-only')
+            process.exit()
         }
         else {
             var itemtogive = as[1].split('=>')[0]
             var callbackaction = as[1].split('=>')[1] + ':' + as[2]
+            var invenhasitem = 0
 
             player.inventory.forEach(el => {
                 if (el.id == itemtogive) {
+                    invenhasitem++
                     var rn = Math.floor(Math.random() * 10)
                     el.amount += rn
                     if (itemtogive == 'iron') {
@@ -483,11 +542,22 @@ function action(act) {
                 }
             })
 
+            if (invenhasitem == 0) {
+                var iv = {}
+                iv.id = itemtogive
+                var rn = Math.floor(Math.random() * 10)
+                iv.amount = rn
+                if (itemtogive == 'iron') {
+                    player.level += rn / 2
+                }
+                player.inventory.push(iv)
+            }
+
             return action(callbackaction)
         }
     }
     else {
-        err('method not supported')
+        err('method not supported @action=>unknown')
         process.exit()
     }
 }
@@ -534,6 +604,7 @@ function showOptions(game) {
     const g = jason.read('game\\games\\' + game + '\\game.json')
     var opt = ['Exit to menu', 'View inventory', 'Cancel']
     console.log('Player level: '.blue + player.level)
+    console.log('\nCurrent game: '.blue + gamedata.currentgame)
     term.singleRowMenu(opt, function (e, r) {
         if (e) {
             err(e)
@@ -861,4 +932,35 @@ function spawn(mobtype, gn, task, mob, gamed) {
             })
         }
     }
+}
+
+function randomize(array) {
+    //causes bugs to occur
+    var a = array
+    var f = []
+    var w = []
+
+    var rn = Math.floor(Math.random() * a.length)
+
+    for (let i = 0; i < a.length; i++) {
+        const el = a[i]
+        if (i == rn) {
+            f.push(el)
+        }
+        else {
+            w.push(el)
+        }
+    }
+
+    for (let i = 0; i < w.length; i++) {
+        const el = w[i]
+        var rn2 = Math.floor(Math.random() * w.length)
+        if (rn2 == i) {
+            f.push(el)
+        }
+        else {
+            f.push(el)
+        }
+    }
+    return f
 }

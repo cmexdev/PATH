@@ -13,10 +13,7 @@
   "dependencies": {
     "boxen": "^4.2.0",
     "ezjason": "^1.0.0",
-    "jquery": "^3.5.1",
-    "jsdom": "^16.4.0",
-    "readline": "^1.3.0",
-    "terminal-image": "^1.2.1",
+    "node-fetch": "^2.6.1",
     "terminal-kit": "^1.44.0"
   }
 }

@@ -4,6 +4,10 @@
 
 A simple, but exciting console-based game.
 
+**Requirements**:
+
+- [NodeJS](https://nodejs.org) installed
+
 ## Game data
 <hr>
 
@@ -18,9 +22,7 @@ A simple, but exciting console-based game.
 
 ### Items
 
-- `wood`
-- `coal`
-- `iron`
+**This file does not contain a list of items**, see the `items.json` file for the list of raw data.
 
 ### Menus
 
@@ -77,6 +79,53 @@ You can also have a callback action if the action does not involve going to anot
 |`show:{menu}`|Shows specified `{menu}`|`false`|
 
 *A list of items, environments, and menus is listed above.*
+
+### Items JSON syntax
+
+There are also different properties in the items JSON file.
+
+**Example**
+```json
+"logs": {
+    "dname": "Logs",
+    "desc": "Basically a broken tree.",
+    "type": "material"
+}
+```
+
+**`dname`**
+<hr>
+
+```json
+"": {
+    "dname": "WhatTheUserSees"
+}
+```
+
+**`desc`**
+<hr>
+
+```json
+"": {
+    "desc": "A quick description of the item, usually comedic."
+}
+```
+
+**`type`**
+<hr>
+
+```json
+"": {
+    "type": "tool"
+}
+```
+
+**List of item types**
+
+|Type|Type explanation|
+|-|-|-|
+|`material`|An item that can be used in crafting|
+|`tool`|An item that can be used to complete task|
 
 ## Game mechanics
 <hr>
