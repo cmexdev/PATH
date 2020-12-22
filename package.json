@@ -1,11 +1,11 @@
 {
   "name": "path",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A console-based game!",
   "main": "index.js",
   "scripts": {
     "start": "title PATH && node index.js",
-    "path:v": "electron v.js",
+    "path:v": "electron visual.js",
     "path": "title PATH && node index.ts"
   },
   "author": "Owen Magill",

@@ -10,6 +10,7 @@ const package = jason.read('package.json')
 const fetch = require('node-fetch')
 const dns = require('dns')
 const http = require('http')
+const shell = require('child_process')
 var githubpackage = {}
 
 //set globals empty to prepare for load
@@ -144,8 +145,11 @@ function pre() {
                                 return mainMenu()
                             }
                             else if (r.selectedIndex == 0) {
-                                const install = fs.createWriteStream('install-' + json.version)
-                                const req = http.get('')
+                                var fn = 'install-' + json.version + '.exe'
+                                const install = fs.createWriteStream(fn)
+                                const req = http.get('http://i3.ytimg.com/vi/J---aiyznGQ/mqdefault.jpg', function(r) {
+                                    r.pipe(install)
+                                })
                             }
                         }
                     })
