@@ -1,7 +1,7 @@
 {
     "biomes": {
         "plain": ["logs"],
-        "cave": ["iron", "coal"]
+        "cave": ["iron", "coal", "woodsword"]
     },
     "biomerarity": {
         "plain": "uncommon",

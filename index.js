@@ -542,7 +542,7 @@ function action(act) {
         return showOptions(gamedata.currentgame)
     }
     else if (act == 'mob-runaway') {
-        if (Math.floor(Math.random() * 2) == 1) {
+        if (rarity('rare') == true) {
             return true
         }
         else {
@@ -1069,7 +1069,6 @@ function chestInit(gamename, gamestate) {
             var len = gamedata.chest.biomes[gamestate[1]].length
             var rn = Math.floor(Math.random() * len)
             return action('give:' + gamedata.chest.biomes[gamestate[1]][rn] + '=>go:' + gamestate[1])
-            //return game('loadfromsaved', gamestate[1], gamestate[2], false)
         }
         else {
             return game('loadfromsaved', gamestate[1], gamestate[2], false)
