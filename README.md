@@ -2,11 +2,15 @@
 
 **This readme may not be fully updated to the latest commit! DO NOT RELY ON IT!!**
 
+- [Errors](docs/errors.md)
+- [Items](docs/items.md)
+
 A simple, but exciting console-based game.
 
 **Requirements**:
 
 - [NodeJS](https://nodejs.org) installed
+- A terminal
 
 ## Game data
 <hr>
@@ -158,6 +162,17 @@ If the player is lucky enough, they will have successfully run away. If not, the
 **Prepare**
 
 **Using a more powerful tool gives the player more levels when the defeat the mob.**
+
+### Chest spawning
+
+This occurence is chosen at random. It depends on the type of biome.
+
+**Supported biomes**:
+
+|Biome|Rarity|
+|-|-|
+|`plain`|`uncommon`|
+|`cave`|`uncommon`|
 
 ### Rarity equations
 

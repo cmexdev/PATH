@@ -1,4 +1,10 @@
 {
-    "plain": ["wood"],
-    "cave": ["iron", "coal"]
+    "biomes": {
+        "plain": ["logs"],
+        "cave": ["iron", "coal"]
+    },
+    "biomerarity": {
+        "plain": "uncommon",
+        "cave": "uncommon"
+    }
 }

@@ -13,6 +13,14 @@ const http = require('http')
 const shell = require('child_process')
 var githubpackage = {}
 
+// COMMENTS
+//! ALERT
+//TODO TODO
+//* HIGHLIGHTED
+//// STRICKED OUT
+
+console.log('PATH is starting!'.bgBlue.white)
+
 //set globals empty to prepare for load
 const player = {}
 player.inventory = []
@@ -77,6 +85,7 @@ gamedata.items = jason.read('game\\items.json')
 gamedata.levels = jason.read('game\\levels.json')
 gamedata.spawning = jason.read('game\\spawning.json')
 gamedata.mob = jason.read('game\\mob.json')
+gamedata.chest = jason.read('game\\chest.json')
 gamedata.state = []
 
 const enviros = fs.readdirSync('game\\environments\\')
@@ -112,16 +121,25 @@ function levelUp(text) {
     }))
 }
 
+function code(code) {
+    console.log('Error code: ' + code)
+}
+
 pre()
 
 function pre() {
     //check connection
+    console.log('Checking internet connection...'.magenta)
     dns.resolve('www.google.com', function (e) {
         if (e) {
+            console.log('An error occured while trying to check for updates...'.bgRed.white)
             err(e)
+            console.log('Failed to check for updates. (check your internet connection and try again later)')
+            code('pre=>internetfail')
             term.singleLineMenu(['Continue'], function (e, r) {
                 if (e) {
                     err(e)
+                    code('pre=>internetfail=>menufail')
                 }
                 else {
                     return mainMenu()
@@ -139,6 +157,7 @@ function pre() {
                     term.singleLineMenu(['Update now', 'Cancel'], function (e, r) {
                         if (e) {
                             err(e)
+                            code('pre=>internetsuccess=>menufail')
                         }
                         else {
                             if (r.selectedIndex == 1) {
@@ -147,7 +166,7 @@ function pre() {
                             else if (r.selectedIndex == 0) {
                                 var fn = 'install-' + json.version + '.exe'
                                 const install = fs.createWriteStream(fn)
-                                const req = http.get('http://i3.ytimg.com/vi/J---aiyznGQ/mqdefault.jpg', function(r) {
+                                const req = http.get('http://i3.ytimg.com/vi/J---aiyznGQ/mqdefault.jpg', function (r) {
                                     r.pipe(install)
                                 })
                             }
@@ -164,6 +183,7 @@ function mainMenu(preinfo) {
     console.clear()
     if (preinfo) {
         console.log(preinfo)
+        code('startloaded=>badgame')
     }
     console.log(boxen('PATH'.underline + ': A simple console-based game built in Node.js', {
         borderColor: 'yellow',
@@ -179,6 +199,7 @@ function mainMenu(preinfo) {
     term.singleRowMenu(['[1] Start a new game', '[2] Load a saved game', '[3] Options', '[4] Exit'], function (e, r) {
         if (e) {
             err(e)
+            code('main=>menufail')
         }
         else {
             if (r.selectedIndex == 0) {
@@ -216,6 +237,7 @@ function newGame() {
     }, function (e, r) {
         if (e) {
             err(e)
+            code('newgame=>name')
         }
         else {
             //CHECK TO SEE IF GAME EXISTS
@@ -232,6 +254,7 @@ function newGame() {
             if (invalidname > 0) {
                 console.clear()
                 err('Invalid game name!')
+                code('newgame=>invalidname')
                 return newGame()
             }
             else {
@@ -268,6 +291,7 @@ function loadGame() {
         function (e, i) {
             if (e) {
                 err(e)
+                code('loadgame=>name')
             }
             else {
                 if (i == undefined) {
@@ -323,7 +347,7 @@ function startLoadedGame(name) {
         player.discovered = gamefile.discovered
 
         if (gamefile.gamestate[0] == 'enviro') {
-            return game('loadfromsaved', gamefile.enviro[0], gamefile.enviro[1])
+            return game('loadfromsaved', gamefile.enviro[0], gamefile.enviro[1], true)
         }
         else if (gamefile.gamestate[0] == 'mob') {
             return spawn(gamefile.gamestate[3], name, 'spawncontinue', gamefile.gamestate[1], gamefile.gamestate[2])
@@ -334,9 +358,10 @@ function startLoadedGame(name) {
     }
 }
 
-function game(task, game, enviroid) {
+function game(task, game, enviroid, ignorechests) {
     console.clear()
 
+    //* requires 'task'
     if (task == 'randomgen') {
         var environmentslen = fs.readdirSync('game\\environments\\').length
         var environments = fs.readdirSync('game\\environments\\')
@@ -374,10 +399,12 @@ function game(task, game, enviroid) {
         term.singleColumnMenu(opt, function (e, resp) {
             if (e) {
                 err(e)
+                code('game=>randomgen=>menufail')
             }
             action(en.options[resp.selectedIndex].action)
         })
     }
+    //* requires 'task', 'game', 'ignorechests'
     else if (task == 'loadenviro') {
 
         //GAME SHOULD BE SAVED
@@ -428,7 +455,11 @@ function game(task, game, enviroid) {
             return spawn('monster', gamedata.currentgame, 'spawnrandom', null, [environment, en.id])
         }
 
-        console.log(boxen(en.message, {
+        if (ignorechests != true) {
+            return chestInit(gamedata.currentgame, gamedata.state)
+        }
+
+        console.log(boxen(en.message + '@loadenviro'.bgYellow, {
             padding: 1,
             borderStyle: 'round',
             borderColor: 'gray'
@@ -445,10 +476,12 @@ function game(task, game, enviroid) {
         term.singleColumnMenu(opt, function (e, resp) {
             if (e) {
                 err(e)
+                code('game=>loadenviro=>menufail')
             }
             action(en.options[resp.selectedIndex].action)
         })
     }
+    //* requires 'task', 'game', 'enviroid'
     else if (task == 'loadfromsaved') {
         const environment = game
         const varianid = enviroid
@@ -462,6 +495,7 @@ function game(task, game, enviroid) {
         } catch (er) {
             console.log('An unknown error occured!'.white.bgRed + ' See error details below.'.gray)
             err(er)
+            code('game=>loadfromsaved=>unknowngameerr')
             process.exit()
         }
 
@@ -479,7 +513,7 @@ function game(task, game, enviroid) {
 
         saveGame(environment, varianid, gamedata.currentgame, player.inventory, player.level, player.discovered, gamedata.state)
 
-        console.log(boxen(en.message, {
+        console.log(boxen(en.message + '@loadfromsaved'.bgBlue, {
             padding: 1,
             borderColor: 'grey',
             borderStyle: 'round'
@@ -496,6 +530,7 @@ function game(task, game, enviroid) {
         term.singleColumnMenu(opt, function (e, resp) {
             if (e) {
                 err(e)
+                code('game=>loadfromsaved=>menufail')
             }
             action(en.options[resp.selectedIndex].action)
         })
@@ -522,12 +557,18 @@ function action(act) {
 
     if (task == 'go') {
         if (as[1].includes('=>') == false) {
-            return game('loadenviro', as[1])
+            //TODO incomplete??
+            return game('loadenviro', as[1], null, false)
         }
     }
     else if (task == 'give') {
         if (as[1].includes('=>') == false) {
+            //! this method of 'give' is incomplete
             err('method not supported @action=>give-only')
+            code('action=>give=>badmethod')
+            console.log('Debug:')
+            console.log(as)
+            console.log(act)
             process.exit()
         }
         else {
@@ -562,6 +603,7 @@ function action(act) {
     }
     else {
         err('method not supported @action=>unknown')
+        code('action=>unknown')
         process.exit()
     }
 }
@@ -612,6 +654,7 @@ function showOptions(game) {
     term.singleRowMenu(opt, function (e, r) {
         if (e) {
             err(e)
+            code('showoptions=>menufail')
         }
         else {
             if (r.selectedIndex == 0) {
@@ -659,6 +702,7 @@ function showOptions(game) {
                     contentHasMarkup: true
                 })
 
+                //! no error handle
                 term.singleRowMenu(['Continue'], function (e, r) {
                     if (g.gamestate[0] == 'mob') {
                         return spawn(g.gamestate[3], g.name, 'spawncontinue', g.gamestate[1], g.gamestate[2])
@@ -709,6 +753,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
             term.singleLineMenu(opt, function (e, r) {
                 if (e) {
                     err(e)
+                    code('spawn=>random=>monster')
                 }
                 else {
                     if (r.selectedIndex == 0) {
@@ -719,6 +764,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                             term.singleLineMenu(['Take a breather'], function (e, r) {
                                 if (e) {
                                     err(e)
+                                    code('spawn=>random=>monster=>runawaymenufail')
                                 }
                                 else {
                                     if (r.selectedIndex == 0) {
@@ -735,6 +781,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                             term.singleLineMenu(['Take a breather'], function (e, r) {
                                 if (e) {
                                     err(e)
+                                    code('spawn=>random=>monster=>caughtmenufail')
                                 }
                                 else {
                                     if (r.selectedIndex == 0) {
@@ -763,45 +810,66 @@ function spawn(mobtype, gn, task, mob, gamed) {
                             console.log('\n')
                             console.log('Select which weapon you want to use:'.cyan)
 
-                            term.singleColumnMenu(itu, function (e, r) {
-                                if (e) {
-                                    err(e)
-                                }
-                                else {
-                                    //item id
-                                    var id = itur[r.selectedIndex]
+                            if ((itu == []) == false) {
+                                err('You failed to prepare in time because you didn\'t have the correct materials!')
+                                console.log('He gotcha'.gray)
+                                //lose levels
+                                player.level += -(m.level)
 
-                                    //rare chance of losing the fight
-                                    if (Math.floor(Math.random() * 10) == Math.floor(Math.random() * 10)) {
-                                        err('You swung badly and missed the monster!')
-                                        console.log('He gotcha'.gray)
-                                        //lose levels
-                                        player.level += -(m.level)
-
-                                        term.singleLineMenu(['Continue'], function (e, r) {
-                                            if (e) {
-                                                err(e)
-                                            }
-                                            else {
-                                                return game('loadfromsaved', gamed[0], gamed[1])
-                                            }
-                                        })
+                                term.singleLineMenu(['Continue'], function (e, r) {
+                                    if (e) {
+                                        err(e)
+                                        code('spawn=>random=>monster=>preparemenufail')
                                     }
                                     else {
-                                        good('You stabbed him in the throat...and, well the rest is history.')
-                                        console.log('Good news is you won!'.gray)
-
-                                        term.singleLineMenu(['Continue'], function (e, r) {
-                                            if (e) {
-                                                err(e)
-                                            }
-                                            else {
-                                                return game('loadfromsaved', gamed[0], gamed[1])
-                                            }
-                                        })
+                                        return game('loadfromsaved', gamed[0], gamed[1])
                                     }
-                                }
-                            })
+                                })
+                            }
+                            else {
+                                term.singleColumnMenu(itu, function (e, r) {
+                                    if (e) {
+                                        err(e)
+                                        code('spawn=>random=>monster=>prepareokmenufail')
+                                    }
+                                    else {
+                                        //item id
+                                        var id = itur[r.selectedIndex]
+
+                                        //rare chance of losing the fight
+                                        if (Math.floor(Math.random() * 10) == Math.floor(Math.random() * 10)) {
+                                            err('You swung badly and missed the monster!')
+                                            console.log('He gotcha'.gray)
+                                            //lose levels
+                                            player.level += -(m.level)
+
+                                            term.singleLineMenu(['Continue'], function (e, r) {
+                                                if (e) {
+                                                    err(e)
+                                                    code('spawn=>random=>monster=>prepareok=>menufail')
+                                                }
+                                                else {
+                                                    return game('loadfromsaved', gamed[0], gamed[1])
+                                                }
+                                            })
+                                        }
+                                        else {
+                                            good('You stabbed him in the throat...and, well the rest is history.')
+                                            console.log('Good news is you won!'.gray)
+
+                                            term.singleLineMenu(['Continue'], function (e, r) {
+                                                if (e) {
+                                                    err(e)
+                                                    code('spawn=>random=>monster=>prepareok=>successmenufail')
+                                                }
+                                                else {
+                                                    return game('loadfromsaved', gamed[0], gamed[1])
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            }
                         }
                     }
                     else if (r.selectedIndex == 2) {
@@ -836,6 +904,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
             term.singleLineMenu(opt, function (e, r) {
                 if (e) {
                     err(e)
+                    code('spawn=>continue=>monster=>menufail')
                 }
                 else {
                     if (r.selectedIndex == 0) {
@@ -846,6 +915,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                             term.singleLineMenu(['Take a breather'], function (e, r) {
                                 if (e) {
                                     err(e)
+                                    code('spawn=>continue=>monster=>escapemenufail')
                                 }
                                 else {
                                     if (r.selectedIndex == 0) {
@@ -860,6 +930,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                             term.singleLineMenu(['Take a breather'], function (e, r) {
                                 if (e) {
                                     err(e)
+                                    code('spawn=>continue=>monster=>caughtmenufail')
                                 }
                                 else {
                                     if (r.selectedIndex == 0) {
@@ -888,45 +959,62 @@ function spawn(mobtype, gn, task, mob, gamed) {
                             console.log('\n')
                             console.log('Select which weapon you want to use:'.cyan)
 
-                            term.singleColumnMenu(itu, function (e, r) {
-                                if (e) {
-                                    err(e)
-                                }
-                                else {
-                                    //item id
-                                    var id = itur[r.selectedIndex]
+                            if ((itu == []) == false) {
+                                err('You failed to prepare in time because you didn\'t have the correct materials!')
+                                console.log('He gotcha'.gray)
+                                //lose levels
+                                player.level += -(m.level)
 
-                                    //rare chance of losing the fight
-                                    if (Math.floor(Math.random() * 10) == Math.floor(Math.random() * 10)) {
-                                        err('You swung badly and missed the monster!')
-                                        console.log('He gotcha'.gray)
-                                        //lose levels
-                                        player.level += -(m.level)
-
-                                        term.singleLineMenu(['Continue'], function (e, r) {
-                                            if (e) {
-                                                err(e)
-                                            }
-                                            else {
-                                                return game('loadfromsaved', gamed[0], gamed[1])
-                                            }
-                                        })
+                                term.singleLineMenu(['Continue'], function (e, r) {
+                                    if (e) {
+                                        err(e)
                                     }
                                     else {
-                                        good('You stabbed him in the throat...and, well the rest is history.')
-                                        console.log('Good news is you won!'.gray)
-
-                                        term.singleLineMenu(['Continue'], function (e, r) {
-                                            if (e) {
-                                                err(e)
-                                            }
-                                            else {
-                                                return game('loadfromsaved', gamed[0], gamed[1])
-                                            }
-                                        })
+                                        return game('loadfromsaved', gamed[0], gamed[1])
                                     }
-                                }
-                            })
+                                })
+                            }
+                            else {
+                                term.singleColumnMenu(itu, function (e, r) {
+                                    if (e) {
+                                        err(e)
+                                    }
+                                    else {
+                                        //item id
+                                        var id = itur[r.selectedIndex]
+
+                                        //rare chance of losing the fight
+                                        if (Math.floor(Math.random() * 10) == Math.floor(Math.random() * 10)) {
+                                            err('You swung badly and missed the monster!')
+                                            console.log('He gotcha'.gray)
+                                            //lose levels
+                                            player.level += -(m.level)
+
+                                            term.singleLineMenu(['Continue'], function (e, r) {
+                                                if (e) {
+                                                    err(e)
+                                                }
+                                                else {
+                                                    return game('loadfromsaved', gamed[0], gamed[1])
+                                                }
+                                            })
+                                        }
+                                        else {
+                                            good('You stabbed him in the throat...and, well the rest is history.')
+                                            console.log('Good news is you won!'.gray)
+
+                                            term.singleLineMenu(['Continue'], function (e, r) {
+                                                if (e) {
+                                                    err(e)
+                                                }
+                                                else {
+                                                    return game('loadfromsaved', gamed[0], gamed[1])
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            }
                         }
                     }
                     else if (r.selectedIndex == 2) {
@@ -939,7 +1027,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
 }
 
 function randomize(array) {
-    //causes bugs to occur
+    //!causes bugs to occur
     var a = array
     var f = []
     var w = []
@@ -967,4 +1055,52 @@ function randomize(array) {
         }
     }
     return f
+}
+
+//TODO continue work on chest feature
+function chestInit(gamename, gamestate) {
+    console.clear()
+    console.log(boxen('HEY THERE WERE RUNNING CHEST INIT', {
+        borderColor: 'red',
+        backgroundColor: 'blue'
+    }))
+    if (gamestate[0] == 'enviro') {
+        if (rarity(gamedata.chest.biomerarity[gamestate[1]]) == true) {
+            var len = gamedata.chest.biomes[gamestate[1]].length
+            var rn = Math.floor(Math.random() * len)
+            return action('give:' + gamedata.chest.biomes[gamestate[1]][rn] + '=>go:' + gamestate[1])
+            //return game('loadfromsaved', gamestate[1], gamestate[2], false)
+        }
+        else {
+            return game('loadfromsaved', gamestate[1], gamestate[2], false)
+        }
+    }
+    return game('loadfromsaved', gamestate[0], gamestate[1], false)
+}
+
+function rarity(rarity) {
+    if (rarity == 'common') {
+        if (Math.floor(Math.random() * 2) == 1) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    else if (rarity == 'uncommon') {
+        if (Math.floor(Math.random() * 10) == 6) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    else if (rarity == 'rare') {
+        if (Math.floor(Math.random() * 10) == Math.floor(Math.random() * 10)) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
 }

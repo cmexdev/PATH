@@ -14,16 +14,19 @@ void setcursor(bool, DWORD);
 void setcursor();
 
 int main() {
-    cout << "Preparing to launch 'PATH'..." << endl;
+    cout << "Starting launcher..." << endl;
 
-    cout << "Reading prefs..." << endl;
-
-    ifstream df("game\\config\\fullscreen");
-    
-
+    cout << "Performing: SYSTEM=>title PATH ..." << endl;
     system("title PATH");
+
+    cout << "Setting launcher fullscreen..." << endl;
     SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
+
+    cout << "Performing: SYSTEM=>node index.js ..." << endl;
     system("node index.js");
+
+    cout << "Closing launcher..." << endl;
+    system("pause");
     return 0;
 }
 
