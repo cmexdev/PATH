@@ -281,3 +281,27 @@ term.singleLineMenu(array, function(e, r) {
 **ezjason** is a package dedicated for reading JSON files in one line of code, developed because of this project.
 
 View on [npm](https://npmjs.com/package/ezjason "The package on npm").
+
+## Launcher
+
+The launcher is written in C++.
+
+### Topics
+
+- Setting display mode
+- Extras
+
+**Setting display mode**
+
+Why fullscreen?
+
+Seriously? I shouldn't even have to say this! Most games are fullscreen. That's why.
+I will admit, it does make the game seem more immersive than just running it windowed.
+
+Where'd my cursor go?
+
+It went to X: 1920, Y: 1080 on your screen. If you are rocking an 4K or larger screen
+resolution, this placement will seem strange, but it worked on my screen. *This was
+an alternative to hiding it.* If you have any idea how to hide the mouse cursor in
+C++ for a console application, **please tell me** (or StackOverflow).
+

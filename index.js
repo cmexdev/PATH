@@ -10,8 +10,9 @@ const package = jason.read('package.json')
 const fetch = require('node-fetch')
 const dns = require('dns')
 const http = require('http')
-const shell = require('child_process')
+const child_process = require('child_process')
 var githubpackage = {}
+const open = require('opn')
 
 // COMMENTS
 //! ALERT
@@ -185,7 +186,7 @@ function mainMenu(preinfo) {
         console.log(preinfo)
         code('startloaded=>badgame')
     }
-    console.log(boxen('PATH'.underline + ': A simple console-based game built in Node.js', {
+    console.log(boxen('PATH'.underline + ': ' + '<INSERT FUNNY TEXT>'.rainbow, {
         borderColor: 'yellow',
         padding: 2,
         borderStyle: 'round',
@@ -196,7 +197,7 @@ function mainMenu(preinfo) {
     //INIT PHASE
     console.log('Welcome to ' + 'PATH'.underline + '! ' + 'Select an option below to continue.'.gray)
 
-    term.singleRowMenu(['[1] Start a new game', '[2] Load a saved game', '[3] Options', '[4] Exit'], function (e, r) {
+    term.singleRowMenu(['Start a new game', 'Load a saved game', 'Options', 'Exit'], function (e, r) {
         if (e) {
             err(e)
             code('main=>menufail')
@@ -212,7 +213,7 @@ function mainMenu(preinfo) {
                 return loadGame()
             }
             else if (r.selectedIndex == 2) {
-                return mainMenu()
+                return options('frommenu')
             }
             else if (r.selectedIndex == 3) {
                 console.clear()
@@ -240,25 +241,31 @@ function newGame() {
             code('newgame=>name')
         }
         else {
-            //CHECK TO SEE IF GAME EXISTS
-            var games = fs.readdirSync('game\\games\\')
-
-            var invalidname = 0
-
-            games.forEach(el => {
-                if (el == r || r.includes('\\') || r.includes('/') || r.includes('&') || r == 'con' || r == 'aux') {
-                    invalidname++
-                }
-            })
-
-            if (invalidname > 0) {
-                console.clear()
-                err('Invalid game name!')
-                code('newgame=>invalidname')
-                return newGame()
+            //check to see if user canceled
+            if (r == undefined) {
+                return mainMenu()
             }
             else {
-                return createValidGame(r)
+                //CHECK TO SEE IF GAME EXISTS
+                var games = fs.readdirSync('game\\games\\')
+
+                var invalidname = 0
+
+                games.forEach(el => {
+                    if (el == r || r.includes('\\') || r.includes('/') || r.includes('&') || r == 'con' || r == 'aux') {
+                        invalidname++
+                    }
+                })
+
+                if (invalidname > 0) {
+                    console.clear()
+                    err('Invalid game name!')
+                    code('newgame=>invalidname')
+                    return newGame()
+                }
+                else {
+                    return createValidGame(r)
+                }
             }
         }
     })
@@ -665,7 +672,7 @@ function showOptions(game) {
                 console.clear()
 
                 var inven = [
-                    ['Name', 'Type', 'Description', 'Amount', 'Strength']
+                    ['Name', 'Type', 'Description', 'Amount', 'Strength (# of uses)']
                 ]
 
                 player.inventory.forEach(el => {
@@ -1102,4 +1109,160 @@ function rarity(rarity) {
             return false
         }
     }
+}
+
+function options(task, option) {
+    console.clear()
+    if (task == 'frommenu') {
+        console.log(boxen('GAME OPTIONS', {
+            padding: 1,
+            margin: 1,
+            float: 'center',
+            align: 'center',
+            backgroundColor: 'blue',
+            borderColor: 'yellow'
+        }))
+        var menuopt = ['View games', 'View settings', 'GitHub', 'Wiki', 'Cancel']
+        term.singleColumnMenu(menuopt, function (e, r) {
+            if (e) {
+                err(e)
+                //todo add error code
+            }
+            else {
+                if (r.selectedIndex == 0) {
+                    //* manage games
+                    return options('specific', 'managegames')
+                }
+                else if (r.selectedIndex == 1) {
+                    //* show settings
+                    return options('specific', 'managesettings')
+                }
+                else if (r.selectedIndex == 2) {
+                    //* open github page
+                    return options('specific', 'opengithub')
+                }
+                else if (r.selectedIndex == 3) {
+                    //* open wiki website
+                    return options('specific', 'openwiki')
+                }
+                else if (r.selectedIndex == 4) {
+                    return mainMenu()
+                }
+            }
+        })
+    }
+    else if (task == 'specific') {
+        if (option == 'managegames') {
+            //* manage games
+            console.clear()
+            console.log(boxen('Manage games', {
+                padding: 1,
+                margin: 1,
+                borderStyle: 'round'
+            }))
+            console.log('Select a game to manage it.'.gray)
+            const games = fs.readdirSync('game\\games')
+            const g = ['Return to options menu'.bgBlue]
+            games.forEach(el => {
+                g.push(el)
+            })
+            term.singleColumnMenu(g, function(e, r) {
+                if (e) {
+                    err(e)
+                    //todo add err code
+                }
+                else {
+                    //* g[0] is always cancel option
+                    //* this way i always know where it is
+                    if (r.selectedIndex == 0) {
+                        return options('frommenu')
+                    }
+                    else {
+                        console.clear()
+                        const sg = games[r.selectedIndex - 1]
+                        var go = ['Delete'.bgRed, 'View JSON data ' + '(nerd)'.gray, 'Cancel']
+                        return manageGames(go, sg)
+                    }
+                }
+            })
+        }
+        else if (option == 'managesettings') {
+            //* manage settings
+            err('There are no settings available!')
+            term.singleLineMenu(['OK'], function (e, r) {
+                if (e) {
+                    err(e)
+                    //todo add err code
+                }
+                else {
+                    return options('frommenu')
+                }
+            })
+        }
+        else if (option == 'opengithub') {
+            //* open github page
+            open('https://github.com/cmexdev/PATH')
+            return options('frommenu')
+        }
+        else if (option == 'openwiki') {
+            //* open wiki
+            open('https://cmexdev.github.io/PATH')
+            return options('frommenu')
+        }
+    }
+}
+
+function manageGames(opt, selected) {
+    console.log(boxen('Seleted game: ' + selected.toString().bgBlue, {
+        padding: 1,
+        borderStyle: 'classic'
+    }))
+    term.singleRowMenu(opt, function (e, r) {
+        if (e) {
+            err(e)
+            //todo add err code
+        }
+        else {
+            if (r.selectedIndex == 2) {
+                //* cancel
+                return options('specific', 'managegames')
+            }
+            else if (r.selectedIndex == 0) {
+                console.log('Are you sure you want to delete game: ' + selected.toString().bgBlue + '? ' + '[Y/N]'.gray)
+                term.yesOrNo({
+                    yes: ['y', 'ENTER'],
+                    no: ['n']
+                }, function(e, r) {
+                    if (e) {
+                        err(e)
+                        //todo add err code
+                    }
+                    else {
+                        if (r == true) {
+                            fs.rmSync('game\\games\\' + selected + '\\game.json')
+                            fs.rmdirSync('game\\games\\' + selected)
+                            return options('specific', 'managegames')
+                        }
+                        else {
+                            return options('specific', 'managegames')
+                        }
+                    }
+                })
+            }
+            else if (r.selectedIndex == 1) {
+                console.clear()
+                console.log(boxen('This game file can be found at: ' + 'game\\games\\' + selected + '\\game.json'))
+                console.log(jason.read('game\\games\\' + selected + '\\game.json'))
+                term.singleLineMenu(['OK'], function(e, r) {
+                    if (e) {
+                        err(e)
+                        //todo add err code
+                    }
+                    else {
+                        return options('specific', 'managegames')
+                    }
+                })
+            }
+        }
+    })
 }

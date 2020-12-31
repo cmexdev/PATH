@@ -9,15 +9,14 @@
 
 using namespace std;
 
-void setcursor(bool, DWORD);
-
-void setcursor();
-
 int main() {
     cout << "Starting launcher..." << endl;
 
     cout << "Performing: SYSTEM=>title PATH ..." << endl;
     system("title PATH");
+
+    cout << "Placing cursor at (1920, 1080)..." << endl;
+    SetCursorPos(1920, 1080);
 
     cout << "Setting launcher fullscreen..." << endl;
     SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
@@ -29,9 +28,3 @@ int main() {
     system("pause");
     return 0;
 }
-
-void setcursor(bool visible, DWORD size) {
-    //bool visible = 0
-    //bool invisible
-}
-
