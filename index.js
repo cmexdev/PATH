@@ -518,6 +518,21 @@ function game(task, game, enviroid, ignorechests) {
 
         const en = e.variants[index]
 
+        var pd = 0
+
+        player.discovered.biomes.forEach(el => {
+            if (el == environment) {
+                pd++
+            }
+        })
+
+        if (pd == 0) {
+            //player has not discovered biome
+            levelUp('You discovered a new biome! (' + environment + ')')
+            player.discovered.biomes.push(environment)
+            player.level += gamedata.levels.biomes[environment]
+        }
+
         saveGame(environment, varianid, gamedata.currentgame, player.inventory, player.level, player.discovered, gamedata.state)
 
         console.log(boxen(en.message + '@loadfromsaved'.bgBlue, {
@@ -589,7 +604,7 @@ function action(act) {
                     var rn = Math.floor(Math.random() * 10)
                     el.amount += rn
                     if (itemtogive == 'iron') {
-                        player.level += rn / 2
+                        player.level += rn / 5
                     }
                 }
             })
@@ -784,7 +799,7 @@ function spawn(mobtype, gn, task, mob, gamed) {
                         else {
                             err('You were caught!')
                             console.log('You lost '.cyan + m.level / 2 + ' levels!'.cyan)
-                            player.level += -(m.level / 2)
+                            player.level += -(m.level)
                             term.singleLineMenu(['Take a breather'], function (e, r) {
                                 if (e) {
                                     err(e)
@@ -1067,21 +1082,62 @@ function randomize(array) {
 //TODO continue work on chest feature
 function chestInit(gamename, gamestate) {
     console.clear()
-    console.log(boxen('HEY THERE WERE RUNNING CHEST INIT', {
-        borderColor: 'red',
-        backgroundColor: 'blue'
-    }))
     if (gamestate[0] == 'enviro') {
         if (rarity(gamedata.chest.biomerarity[gamestate[1]]) == true) {
-            var len = gamedata.chest.biomes[gamestate[1]].length
-            var rn = Math.floor(Math.random() * len)
-            return action('give:' + gamedata.chest.biomes[gamestate[1]][rn] + '=>go:' + gamestate[1])
+            console.log(boxen('You stumbled upon a chest!', {
+                padding: 1,
+                borderStyle: 'round'
+            }))
+            term.singleLineMenu(['Open it', 'Don\'t open it'], function(e, r) {
+                if (e) {
+                    err(e)
+                    //todo add err code
+                }
+                else {
+                    if (r.selectedIndex == 0) {
+                        var chestgoboom = Math.floor(Math.random() * 2)
+                        if (chestgoboom == 0) {
+                            //* chest goes boom
+                            console.clear()
+                            player.level += -2
+                            err('You tried to open the chest, but it blew up!')
+                            console.log('You lost ' + 2 + ' levels!')
+                            term.singleLineMenu(['OK'], function (e, r) {
+                                if (e) {
+                                    err(e)
+                                }
+                                else {
+                                    return game('loadenviro', gamestate[1])
+                                }
+                            })
+                        }
+                        else {
+                            var len = gamedata.chest.biomes[gamestate[1]].length
+                            var rn = Math.floor(Math.random() * len)
+                            console.log('\n\nYou got ' + gamedata.chest.biomes[gamestate[1]][rn].toString().bgGreen + '!')
+                            term.singleLineMenu(['OK'], function (e, r) {
+                                if (e) {
+                                    err(e)
+                                }
+                                else {
+                                    return action('give:' + gamedata.chest.biomes[gamestate[1]][rn] + '=>go:' + gamestate[1])
+                                }
+                            })
+                        }
+                    }
+                    else if (r.selectedIndex == 1) {
+                        return game('loadenviro', gamestate[1])
+                    }
+                }
+            })
         }
         else {
             return game('loadfromsaved', gamestate[1], gamestate[2], false)
         }
     }
-    return game('loadfromsaved', gamestate[0], gamestate[1], false)
+    else {
+        return game('loadfromsaved', gamestate[1], gamestate[2], false)
+    }
 }
 
 function rarity(rarity) {

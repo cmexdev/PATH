@@ -7,17 +7,14 @@
             "options": [
                 {
                     "title": "Enter the cave",
-                    "key": "C",
                     "action": "go:cave"
                 },
                 {
                     "title": "Continue walking",
-                    "key": "W",
                     "action": "go:plain"
                 },
                 {
                     "title": "Continue walking",
-                    "key": "W",
                     "action": "go:plain"
                 },
                 {
@@ -33,17 +30,14 @@
             "options": [
                 {
                     "title": "Cut down the trees and move on",
-                    "key": "C",
                     "action": "give:logs=>go:plain"
                 },
                 {
                     "title": "Continue walking",
-                    "key": "W",
                     "action": "go:plain"
                 },
                 {
                     "title": "Continue walking",
-                    "key": "W",
                     "action": "go:plain"
                 },
                 {

@@ -32,6 +32,7 @@ There are many errors that are possible in PATH. Most of them are rare.
   - [spawn=>continue=>monster=>menufail](#spawncontinuemonstermenufail)
   - [spawn=>continue=>monster=>escapemenufail](#spawncontinuemonsterescapemenufail)
   - [spawn=>continue=>monster=>caughtmenufail](#spawncontinuemonstercaughtmenufail)
+- [Next steps](#next-steps)
 
 ## pre=>internetfail
 
@@ -113,6 +114,8 @@ The load from saved menu failed.
 
 The give action function was sent a bad method that is not supported.
 
+**This error is caused by a bad [command](commands.md).***
+
 **Fatal**
 
 ## action=>unknown
@@ -186,3 +189,7 @@ The escape continue menu failed.
 The caught continue menu failed.
 
 **Fatal**
+
+# Next steps
+
+[<== Back (menus)](menu.md) | [Next (items) ==>](items.md)

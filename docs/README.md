@@ -1,10 +1,10 @@
-# PATH docs (& wiki)
+# PATH
 
 PATH is a console game. That means there are **no graphics**. It's just simple code run in the terminal.
 
-- [PATH docs (& wiki)](#path-docs--wiki)
+- [PATH](#path)
   - [Requirements](#requirements)
-  - [Gettings started](#gettings-started)
+  - [Getting started](#getting-started)
 
 ## Requirements
 
@@ -12,9 +12,10 @@ PATH is a console game. That means there are **no graphics**. It's just simple c
 - A **terminal** to run the program
 - **NodeJS** installed
 
-## Gettings started
+## Getting started
 
-Here are some pages that should be visited to learn about the game.
+The guide will help you get started with PATH and learn all* of it's sneaky game mechanics.
 
-- [Errors](errors.md)
-- [Items](items.md)
+**Not really (that'd be too easy)*
+
+Start off with the [installation](install.md).
