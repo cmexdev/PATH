@@ -1,0 +1,61 @@
+{
+    "variants": [
+        {
+            "id": "ravine1",
+            "type": "continue",
+            "message": "You are at the bottom of a ravine. It's very warm down here. You see some iron, coal and a blue substane on the ground.",
+            "options": [
+                {
+                    "title": "Mine the iron",
+                    "action": "give:iron=>go:ravine"
+                },
+                {
+                    "title": "Mine the coal",
+                    "action": "give:coal=>go:ravine"
+                },
+                {
+                    "title": "Pick up the blue substance",
+                    "action": "give:goo=>go:ravine"
+                }
+            ]
+        },
+        {
+            "id": "ravine2",
+            "type": "continue",
+            "message": "You are in a ravine; it's actually still pretty light down here. There's not much on this side of the ravine.",
+            "options": [
+                {
+                    "title": "Mine the coal",
+                    "action": "give:coal=>go:ravine"
+                },
+                {
+                    "title": "Walk around",
+                    "action": "go:ravine"
+                },
+                {
+                    "title": "Walk around some more",
+                    "action": "go:ravine"
+                }
+            ]
+        },
+        {
+            "id": "ravine3",
+            "type": "exit",
+            "message": "You are in a ravine; you spot a rope ladder. (the same one?)",
+            "options": [
+                {
+                    "title": "Walk around",
+                    "action": "go:ravine"
+                },
+                {
+                    "title": "Go up the ladder",
+                    "action": "go:plain"
+                },
+                {
+                    "title": "Smell the air",
+                    "action": "go:ravine"
+                }
+            ]
+        }
+    ]
+}

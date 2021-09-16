@@ -1,0 +1,12 @@
+{
+    "exit": [
+        ["exit", "Exits the in-game terminal."]
+    ],
+    "inventory": [
+        ["has {...}", "Returns whether the player has item '{...}' in their inventory."],
+        ["hasType {...}", "Returns whether the player has item type '{...}' in their inventory."]
+    ],
+    "show": [
+        ["{...}", "Shows a specified object"]
+    ]
+}

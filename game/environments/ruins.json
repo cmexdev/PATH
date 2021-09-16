@@ -1,0 +1,61 @@
+{
+    "variants": [
+        {
+            "id": "ruins1",
+            "type": "continue",
+            "message": "You stumble across a dark room. It has some iron protruding from the side, and two doorways. One has stairs.",
+            "options": [
+                {
+                    "title": "Mine the iron and move on",
+                    "action": "give:iron=>go:ruins"
+                },
+                {
+                    "title": "Enter the dark doorway",
+                    "action": "go:ruins"
+                },
+                {
+                    "title": "Enter the doorway with stairs",
+                    "action": "go:ruins"
+                }
+            ]
+        },
+        {
+            "id": "ruins2",
+            "type": "exit",
+            "message": "You enter a badly light room; there is some light from the broken ceiling which reveals some sunlight. There is a pile of coal and a seemingly empty doorway.",
+            "options": [
+                {
+                    "title": "Enter the doorway",
+                    "action": "go:ruins"
+                },
+                {
+                    "title": "Grab the coal and move on",
+                    "action": "give:coal=>go:ruins"
+                },
+                {
+                    "title": "Climb out of the room",
+                    "action": "go:plain"
+                }
+            ]
+        },
+        {
+            "id": "ruins3",
+            "type": "continue",
+            "message": "You walk into a huge hall. You wonder how it got this far underground. You see some logs in the corner. Probably for making a fire. There's also two doors on each side of the hall.",
+            "options": [
+                {
+                    "title": "Enter the doorway on the right",
+                    "action": "go:ruins"
+                },
+                {
+                    "title": "Grab the logs in the corner and leave the hall",
+                    "action": "give:logs=>go:ruins"
+                },
+                {
+                    "title": "Exit through the doorway on the left",
+                    "action": "go:ruins"
+                }
+            ]
+        }
+    ]
+}

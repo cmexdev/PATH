@@ -6,12 +6,13 @@
   "scripts": {
     "start": "title PATH && node index.js",
     "path:v": "electron visual.js",
-    "path": "title PATH && node index.ts"
+    "path": "start PATH.exe"
   },
   "author": "Owen Magill",
   "license": "ISC",
   "dependencies": {
     "boxen": "^4.2.0",
+    "colors": "^1.4.0",
     "ezjason": "^1.0.0",
     "node-fetch": "^2.6.1",
     "opn": "^6.0.0",

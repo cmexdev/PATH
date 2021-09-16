@@ -1,6 +1,6 @@
 {
     "monster": {
-        "biome": ["cave"],
+        "biome": ["cave", "ruins", "ravine"],
         "level": 5,
         "occurence": "common"
     }

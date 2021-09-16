@@ -3,29 +3,70 @@
         "logs": {
             "dname": "Logs",
             "desc": "Bascially a broken tree.",
-            "type": "material"
+            "type": "material",
+            "worth": 0.2,
+            "craft": null
         },
         "coal": {
             "dname": "Coal",
             "desc": "A black thing that you get when mining.",
-            "type": "material"
+            "type": "material",
+            "worth": 0.5,
+            "craft": null
         },
         "iron": {
             "dname": "Iron",
             "desc": "OOOH!! Shiny and strong, makes good things.",
-            "type": "material"
+            "type": "material",
+            "worth": 1,
+            "craft": null
         },
         "ironsword": {
             "dname": "Iron Sword",
             "desc": "A strong sword.",
             "strength": 10,
-            "type": "tool"
+            "type": "tool",
+            "worth": 2.5,
+            "craft": [
+                ["iron", 2],
+                ["stick", 1]
+            ]
         },
         "woodsword": {
             "dname": "Wood Sword",
             "desc": "A sword that's made out of wood! 'Amazn basix'!",
             "strength": 5,
-            "type": "tool"
+            "type": "tool",
+            "worth": 1,
+            "craft": [
+                ["logs", 2],
+                ["stick", 1]
+            ]
+        },
+        "stick": {
+            "dname": "Stick",
+            "desc": "When you break a log down.",
+            "type": "material",
+            "worth": 0.5,
+            "craft": [
+                ["logs", 2]
+            ]
+        },
+        "goo": {
+            "dname": "Goo",
+            "desc": "Stick. DO NOT EAT. Might be flammable, you don't know.",
+            "type": "material",
+            "worth": 0.5,
+            "craft": null
         }
-    }
+    },
+    "list": [
+        "logs",
+        "coal",
+        "iron",
+        "stick",
+        "woodsword",
+        "ironsword",
+        "goo"
+    ]
 }

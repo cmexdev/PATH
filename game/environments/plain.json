@@ -16,10 +16,6 @@
                 {
                     "title": "Continue walking",
                     "action": "go:plain"
-                },
-                {
-                    "title": "More options",
-                    "action": "show:options"
                 }
             ]
         },
@@ -39,10 +35,25 @@
                 {
                     "title": "Continue walking",
                     "action": "go:plain"
+                }
+            ]
+        },
+        {
+            "id": "plain3",
+            "type": "exit",
+            "message": "You see a giant crack in the earth. A ravine. There's a rickety rope ladder down. You could also ignore this amazing oppurtunity. You see some trees nearby.",
+            "options": [
+                {
+                    "title": "Climb down the ladder",
+                    "action": "go:ravine"
                 },
                 {
-                    "title": "More options",
-                    "action": "show:options"
+                    "title": "Ignore it because you're afraid of heights",
+                    "action": "go:plain"
+                },
+                {
+                    "title": "Chop up the tree",
+                    "action": "give:logs=>go:plain"
                 }
             ]
         }

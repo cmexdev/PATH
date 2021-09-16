@@ -2,10 +2,12 @@
     "items": {
         "logs": 1,
         "coal": 1,
-        "iron": 2   
+        "iron": 2,
+        "woodsword": 2
     },
     "biomes": {
         "plain": 1,
-        "cave": 1
+        "cave": 1,
+        "ruins": 1.5
     }
 }

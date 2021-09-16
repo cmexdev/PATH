@@ -56,3 +56,7 @@ This sample action will first, give the player wood, and then send the player to
 # Next steps
 
 [<== Back (items)](items.md) | [Next (commands) ==>](commands.md)
+
+# Dev doc
+
+There isn't a dev doc as of right now, because pretty much everything is covered in this doc.

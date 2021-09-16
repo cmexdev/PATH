@@ -12,6 +12,28 @@ A simple, but exciting console-based game.
 - [NodeJS](https://nodejs.org) installed
 - A terminal
 
+- [**Path**](#path)
+  - [Game data](#game-data)
+    - [Biomes](#biomes)
+    - [Items](#items)
+    - [Menus](#menus)
+    - [environment JSON syntax](#environment-json-syntax)
+    - [Items JSON syntax](#items-json-syntax)
+  - [Game mechanics](#game-mechanics)
+    - [Monster spawning](#monster-spawning)
+    - [Chest spawning](#chest-spawning)
+    - [Rarity equations](#rarity-equations)
+    - [`player` object](#player-object)
+      - [`inventory`](#inventory)
+  - [Souce code](#souce-code)
+    - [Files and folders](#files-and-folders)
+    - [Programming](#programming)
+      - [Common code](#common-code)
+    - [Packages](#packages)
+  - [ezjason](#ezjason)
+  - [Launcher](#launcher)
+    - [Topics](#topics)
+
 ## Game data
 <hr>
 
@@ -265,6 +287,12 @@ term.singleLineMenu(array, function(e, r) {
 ```js
 ['mob', mobname, [environment, environment_id], mobtype]
 ```
+
+**Game functions**
+
+- `randomgen`: used for creating new games. Requires the `task` parameter.
+- `loadenviro`: used for returning to game menu. (*it is usually the `loadfromsaved` parameter*). Requires the `task`, `game` (environment), and the `ignorechests` bool.
+- `loadfromsaved`: used for return to the game menu. Requires the `task`, `game` (environment), and the `enviroid` (variant ID) parameter.
 
 ### Packages
 

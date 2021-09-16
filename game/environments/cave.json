@@ -16,10 +16,6 @@
                 {
                     "title": "Enter the branch with light",
                     "action": "go:cave"
-                },
-                {
-                    "title": "More options",
-                    "action": "show:options"
                 }
             ]
         },
@@ -39,10 +35,25 @@
                 {
                     "title": "Go down the deep and dark path",
                     "action": "go:cave"
+                }
+            ]
+        },
+        {
+            "id": "cave3",
+            "type": "exit",
+            "message": "You enter a cavern with a wall on one side that contains a doorway. There is also a hole in the center of the cavern. You spot some iron on the side.",
+            "options": [
+                {
+                    "title": "Go through the doorway",
+                    "action": "go:ruins"
                 },
                 {
-                    "title": "More options",
-                    "action": "show:options"
+                    "title": "Jump down the hole",
+                    "action": "go:cave"
+                },
+                {
+                    "title": "Mine the iron and move on",
+                    "action": "give:iron=>go:cave"
                 }
             ]
         }

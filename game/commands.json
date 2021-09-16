@@ -1,0 +1,10 @@
+[
+    "exit",
+    "cls",
+    "inventory",
+    "inventory has {...}",
+    "inventory hasType {...}",
+    "inventory clean",
+    "show",
+    "show inventory"
+]
