@@ -14,7 +14,7 @@ int main() {
     cout << "Starting launcher..." << endl;
 
     //So the user can identify what this weird console app is.
-    cout << "Performing: SYSTEM=>title PATH ..." << endl;
+    cout << "Renaming window..." << endl;
     system("title PATH");
 
     //An alternative to hiding the cursor.
@@ -28,7 +28,7 @@ int main() {
 
     //Using 'node.exe' so the user does not need to have NodeJS installed.
     //Of course, it is recommended that the user has NodeJS installed.
-    cout << "Performing: SYSTEM=>node.exe index.js ..." << endl;
+    cout << "Running index.js..." << endl;
     system("node.exe index.js");
 
     //This handles whenever PATH crashes or closes.
